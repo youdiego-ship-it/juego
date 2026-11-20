@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guardianes de la Palabra</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070506;--p1:#110c0b;--p2:#1a1210;--line:#3b2a1b;--gold:#c9a45c;--gold2:#8a6a2f;--ink:#ddd0b6;--mut:#8f8168;--red:#8f1a12;--red2:#c9321f;--ok:#7fbf6a;--bad:#d2553f}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:400 20px/1.6 "EB Garamond",Georgia,serif;min-height:100vh;
+ background:radial-gradient(900px 420px at 50% -60px,rgba(160,40,20,.33),transparent 70%),radial-gradient(1200px 900px at 50% 120%,rgba(90,20,10,.25),transparent 70%),var(--bg);background-attachment:fixed}
+h1,h2,h3,.cz{font-family:Cinzel,"EB Garamond",serif;margin:0;letter-spacing:.06em;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+a{color:var(--gold)}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 90px}
+.mut{color:var(--mut)}.sm{font-size:16px}.gold{color:var(--gold)}
+/* cabecera */
+header{position:sticky;top:0;z-index:5;background:linear-gradient(#050304,rgba(5,3,4,.9));border-bottom:1px solid var(--line)}
+.hd{max-width:860px;margin:0 auto;padding:12px 18px 8px;display:flex;align-items:center;gap:12px}
+.hd h1{flex:1;font-size:17px;font-weight:900;color:var(--gold);text-transform:uppercase;letter-spacing:.14em}
+.chip{border:1px solid var(--line);background:var(--p1);padding:3px 12px;font:700 13px Cinzel;letter-spacing:.08em;white-space:nowrap;color:var(--gold)}
+nav{max-width:860px;margin:0 auto;padding:0 18px;display:flex}
+nav button{flex:1;padding:10px 4px;font:700 13px Cinzel;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);border-bottom:2px solid transparent}
+nav button.on{color:var(--ink);border-color:var(--red2)}
+/* botones */
+.btn{display:inline-block;font:700 15px Cinzel;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:#f3e6c8;padding:14px 30px;margin:4px 6px 4px 0;
+ background:linear-gradient(#b02a1b,#6d120c);border:1px solid #e0a070;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 0 22px rgba(190,50,25,.28);
+ clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,12px 100%,0 50%)}
+.btn:hover{background:linear-gradient(#cf3a26,#851a10)}
+.btn.sec{background:var(--p2);border-color:var(--gold2);color:var(--gold);box-shadow:none}
+.btn.sec:hover{background:#241a14}
+/* paneles */
+.panel{position:relative;background:linear-gradient(var(--p2),var(--p1));border:1px solid var(--line);padding:22px;margin:18px 0}
+.panel:before,.panel:after{content:"";position:absolute;width:14px;height:14px;border:1px solid var(--gold2)}
+.panel:before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.panel:after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.div{display:flex;align-items:center;gap:14px;color:var(--gold2);margin:26px 0 14px}
+.div:before,.div:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2))}
+.div:after{transform:scaleX(-1)}
+.div span{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);flex:none}
+.eyebrow{font:700 13px Cinzel;letter-spacing:.3em;text-transform:uppercase;color:var(--red2)}
+/* héroe */
+.hero{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center}
+.port{position:relative;border:1px solid var(--gold2);background:#000;overflow:hidden}
+.port img{width:100%;aspect-ratio:236/382;object-fit:contain;background:#000}
+.port:after{content:"";position:absolute;inset:0;pointer-events:none}
+.hero h2{font-size:28px;font-weight:900;color:#f0e2c2;line-height:1.15}
+.bar{height:8px;background:#000;border:1px solid var(--line);margin:10px 0 4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#6d120c,var(--red2),#f0a050)}
+/* bienvenida */
+.wel{text-align:center;padding-top:10px}
+.wel .port{width:210px;margin:0 auto 18px}
+.wel h2{font-size:clamp(30px,7vw,52px);font-weight:900;color:#f0e2c2;text-transform:uppercase;line-height:1.05;text-shadow:0 0 40px rgba(200,60,30,.5)}
+.wel p{max-width:560px;margin:14px auto}
+.wel input{display:block;width:100%;max-width:340px;margin:18px auto 10px;padding:13px;background:#000;border:1px solid var(--gold2);color:var(--ink);font:700 18px Cinzel;text-align:center;letter-spacing:.1em}
+/* camino */
+.era-h{text-align:center;margin-top:44px}
+.era-h h2{font-size:clamp(24px,5vw,34px);font-weight:900;color:#f0e2c2;text-transform:uppercase}
+.path{position:relative;margin:18px 0 0 27px;border-left:1px solid var(--gold2);padding:4px 0}
+.node{display:flex;align-items:center;gap:20px;width:100%;text-align:left;padding:11px 10px 11px 0;margin-left:-23px}
+.node .dia{width:46px;height:46px;flex:none;transform:rotate(45deg);background:var(--p1);border:1px solid var(--line);display:grid;place-items:center}
+.node .dia b{transform:rotate(-45deg);font-size:21px;font-weight:400}
+.node .t{flex:1;font:700 18px Cinzel;letter-spacing:.05em;color:var(--ink)}
+.node .t small{display:block;font:400 16px "EB Garamond";letter-spacing:0;color:var(--mut)}
+.node.done .dia{border-color:var(--gc);box-shadow:0 0 16px -2px var(--gc)}
+.node.open .dia{border-color:var(--red2);background:#2a0d09;animation:ember 1.8s infinite}
+.node.lock{opacity:.38;cursor:not-allowed}
+.node:not(.lock):hover .t{color:#fff}
+@keyframes ember{50%{box-shadow:0 0 26px 2px rgba(220,70,30,.7)}}
+.gem{width:20px;height:20px;flex:none}
+/* guardián */
+.big{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:24px;align-items:center}
+.gal{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.armory{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:10px}
+.armory.gm{grid-template-columns:repeat(6,1fr)}
+.gal figure,.armory figure{position:relative;margin:0;background:#000;border:0;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.gal img,.armory img{width:100%;object-fit:contain;background:#000;transition:filter .25s}
+.gal img{aspect-ratio:320/470}
+.armory img{aspect-ratio:136/400}
+.armory.helm img{aspect-ratio:340/400}
+.armory.gm img{aspect-ratio:256/410}
+.gal figcaption,.armory figcaption{font:700 11px/1.3 Cinzel;letter-spacing:.04em;text-align:center;padding:6px 3px;color:var(--mut);min-height:44px}
+.armory figcaption b,.gal figcaption b{display:block;color:var(--red2)}
+.off img{filter:brightness(.22) grayscale(.8)}
+.off:before{content:"🔒";position:absolute;top:5px;right:6px;font-size:13px;z-index:1;opacity:.85}
+.on figcaption,.cur figcaption{color:var(--gold)}
+.cur figcaption{color:#ffe08a!important}.cur figcaption b{color:#ffe08a!important}
+.gal figure:hover img,.armory figure:hover img,.gal figure:focus img,.armory figure:focus img{filter:brightness(1.15)}.gal figure:focus,.armory figure:focus{outline:none}
+.off:hover img,.off:focus img{filter:none}
+#pv{position:fixed;z-index:60;width:250px;background:#000;border:1px solid var(--gold2);box-shadow:0 18px 40px rgba(0,0,0,.9);padding:12px;pointer-events:none;display:none;text-align:center}
+#pv img{width:100%;max-height:330px;object-fit:contain;background:#000;margin:0 auto}
+#pv .n{font:700 15px Cinzel;color:#f0e2c2;margin-top:8px;letter-spacing:.04em}
+#pv .r{font-size:15px;color:var(--gold);margin-top:3px}
+#pv .r.lk{color:var(--mut)}
+.forge{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;margin-top:10px}
+.blade{border:0;background:#000}
+.blade img{width:100%;aspect-ratio:136/585;object-fit:contain;background:#000}
+.gems{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.gems .gem{width:22px;height:22px}
+.newsw{width:120px;margin:16px auto;border:0;background:#000;animation:rise .9s}
+.newsw img{width:100%}
+.helmnew{width:220px}
+.hf .blade img{aspect-ratio:270/294}
+@media (max-width:640px){.armory.gm{grid-template-columns:repeat(4,1fr)}.gal,.armory{gap:6px}.gal figcaption,.armory figcaption{font-size:9px;min-height:36px}.forge{grid-template-columns:110px 1fr}}
+.tre,.big{background:#000!important;border-color:#000!important}.tre:before,.tre:after,.big:before,.big:after{display:none}
+.blade,.big .port,.hero .port{border:0!important}
+.tre svg{width:100%;height:auto;display:block}
+.cover{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--gold2);margin:0 0 20px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.verse{text-align:center;margin:6px auto 0;max-width:640px}
+.verse p{font:italic 500 24px/1.4 "EB Garamond";color:#f0e2c2;margin:0}
+.verse span{font:700 13px Cinzel;letter-spacing:.25em;color:var(--gold)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+.steps>div{background:linear-gradient(var(--p2),var(--p1));border:1px solid var(--line);padding:16px 14px;text-align:center}
+.steps b{display:inline-grid;place-items:center;width:34px;height:34px;transform:rotate(45deg);border:1px solid var(--gold);font:900 15px Cinzel;color:var(--gold)}
+.steps b i{transform:rotate(-45deg);font-style:normal}
+.steps h4{font:700 17px Cinzel;letter-spacing:.12em;text-transform:uppercase;color:#f0e2c2;margin:12px 0 4px}
+.steps p,.goals p{margin:0;font-size:16px;line-height:1.45;color:var(--ink)}
+.goals{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px;text-align:left}
+.goals>div{display:flex;gap:12px;align-items:center;background:#000;border:1px solid var(--line);padding:10px}
+.goals img{width:58px;height:78px;object-fit:contain;background:#000;flex:none}
+.goals b{display:block;font:700 14px Cinzel;letter-spacing:.06em;color:var(--gold);margin-bottom:2px}
+@media (max-width:640px){.steps,.goals{grid-template-columns:1fr}}
+.herofull{position:relative;width:100vw;margin-left:calc(50% - 50vw);height:100vh;height:100svh;overflow:hidden;background:#000}
+.herofull.short{height:72vh;margin-top:-18px}
+.herofull img{width:100%;height:100%;object-fit:cover;object-position:center 30%;animation:kb 26s ease-in-out infinite alternate,heroin 1.6s ease-out both;transform-origin:65% 40%}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07) translate(-1%,-1%)}}
+@keyframes heroin{from{opacity:0;filter:brightness(.3)}to{opacity:1;filter:none}}
+.herofull .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.25),transparent 25%,transparent 62%,var(--bg) 100%)}
+.embers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.embers i{position:absolute;bottom:-10px;width:4px;height:4px;border-radius:50%;background:#ffcf7a;box-shadow:0 0 8px 2px rgba(255,170,60,.8);opacity:0;animation:ember-up linear infinite}
+@keyframes ember-up{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}100%{transform:translate(40px,-95vh);opacity:0}}
+.cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;font:700 13px Cinzel;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);text-shadow:0 2px 10px #000;animation:fadein 1s 1.4s both}
+.cue span{font-size:30px;line-height:1;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(7px)}}
+@keyframes fadein{from{opacity:0}}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+.verse p{animation:fadein 1.4s .2s both}
+.intro summary .btn{margin-top:14px}
+.herofull.short .cue{display:none}
+html,body{overflow-x:hidden}
+@media (max-aspect-ratio:1/1){.herofull,.herofull.short{height:auto}.herofull img{height:auto;aspect-ratio:16/9;animation:kb 26s ease-in-out infinite alternate,heroin 1.6s ease-out both}.cue{bottom:8px;font-size:10px}.cue span{font-size:22px}}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
+.mode{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 14px 20px;background:#000;border:1px solid var(--line);transition:transform .25s,box-shadow .25s,border-color .25s}
+.mode img{width:120px;height:140px;object-fit:contain;margin-bottom:6px}
+.mode{cursor:pointer;position:relative}.mode input{position:absolute;opacity:0;pointer-events:none}
+.mode .mt{display:flex;flex-direction:column;align-items:center;gap:4px}
+.mode b{font:900 22px Cinzel;letter-spacing:.12em;text-transform:uppercase;color:#f0e2c2}
+.mode small{font:700 12px Cinzel;letter-spacing:.25em;text-transform:uppercase;color:var(--red2)}
+.mode span{font-size:16px;line-height:1.4;color:var(--ink);margin-top:6px}
+.mode:hover,.mode.sel{border-color:var(--gold);box-shadow:0 0 28px rgba(201,164,92,.35);transform:translateY(-3px)}
+@media (max-width:640px){.modes{grid-template-columns:1fr}.mode{flex-direction:row;flex-wrap:wrap;text-align:left;justify-content:flex-start}.mode img{width:64px;height:76px;margin:0 8px 0 0}.mode .mt{align-items:flex-start}.mode span{flex-basis:100%}}
+#xpb{position:relative;max-width:824px;width:calc(100% - 36px);margin:0 auto 2px;height:6px;background:#140d0b;border:1px solid #2a1d14}
+#xpb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a6a2f,#ffe08a,#c9a45c,#ffe08a);background-size:200% 100%;box-shadow:0 0 10px rgba(240,190,90,.7);transition:width 1.2s cubic-bezier(.2,.8,.2,1);animation:shim 3s linear infinite}
+#xpb span{display:none;font:700 10px Cinzel;letter-spacing:.2em;color:var(--gold2)}
+@keyframes shim{to{background-position:-200% 0}}
+.qbar{display:flex;gap:8px;max-width:860px;margin:18px auto 0;padding:0 18px}
+.qbar span{flex:1;height:10px;background:#140d0b;border:1px solid var(--line);transition:background .4s,box-shadow .4s}
+.qbar .ok{background:linear-gradient(90deg,#b8862e,#ffe08a,#c9a45c,#ffe08a);background-size:200% 100%;animation:shim 2.5s linear infinite;box-shadow:0 0 14px rgba(255,200,90,.7);border-color:#e8c46c}
+.qbar .ko{background:#4a1510;border-color:#6d1f15}
+.qbar .now{border-color:var(--gold);animation:nowp 1.4s ease-in-out infinite}
+@keyframes nowp{50%{box-shadow:0 0 10px rgba(201,164,92,.6)}}
+.qlbl{max-width:860px;margin:6px auto 0;padding:0 18px;display:flex;justify-content:space-between;font:700 11px Cinzel;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase}
+.gp{position:fixed;left:0;top:0;width:9px;height:9px;margin:-4px 0 0 -4px;border-radius:50%;background:radial-gradient(#fffbe0,#ffcf5a 55%,rgba(240,170,40,0) 72%);box-shadow:0 0 12px 4px rgba(255,190,70,.75);pointer-events:none;z-index:200}
+.plus{position:fixed;font:900 28px Cinzel;color:#ffe08a;text-shadow:0 0 16px #f0a020,0 0 4px #000;pointer-events:none;z-index:201}
+.flash{animation:flash .7s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 rgba(255,210,100,0)}30%{box-shadow:0 0 30px 8px rgba(255,210,100,.85)}100%{box-shadow:0 0 0 rgba(255,210,100,0)}}
+.opt.ok{animation:okglow .9s ease-out}
+@keyframes okglow{30%{box-shadow:0 0 26px rgba(255,210,100,.7);border-color:#ffe08a}}
+.adv{max-width:560px;margin:26px auto 0;text-align:left}
+.adv .row{margin:0 0 14px}
+.adv .lb{display:flex;justify-content:space-between;gap:10px;font-size:16px}
+.adv .lb b{font:700 13px Cinzel;letter-spacing:.08em;color:var(--gold)}
+.adv .tr{height:12px;background:#140d0b;border:1px solid var(--line);margin-top:4px;overflow:hidden}
+.adv .tr i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a6a2f,#ffe08a,#c9a45c,#ffe08a);background-size:200% 100%;animation:shim 3s linear infinite;box-shadow:0 0 12px rgba(240,190,90,.6)}
+.sico{display:block;object-fit:contain;mix-blend-mode:lighten}
+.item .ii .sico{width:110px;height:110px}
+.gchip{display:inline-flex;align-items:center;gap:5px}.gchip svg{flex:none}.gchip b{color:#ffe08a}
+.bump{animation:bump .5s ease-out}@keyframes bump{40%{transform:scale(1.25);box-shadow:0 0 18px rgba(255,210,100,.8)}}
+.pw{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 12px}
+.pwb{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--gold2);background:#0a0707;font:700 12px Cinzel;letter-spacing:.06em;color:var(--gold)}
+.pwb small{color:var(--mut)}.pwb.on{border-color:#7fb0ff;box-shadow:0 0 14px rgba(110,160,255,.5);color:#cfe0ff}.pwb:disabled{opacity:.5;cursor:default}.pwb.on:disabled{opacity:1}
+.opt.gone{opacity:.25;text-decoration:line-through;cursor:default}
+.lamp{margin:0 0 12px;font-size:17px;color:#ffe9a6;display:flex;align-items:center;gap:8px}
+.shieldmsg{display:flex;align-items:center;gap:8px;color:#bcd4ff;margin:0}
+.loot{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #8a6a2f;background:rgba(255,200,90,.06);color:#ffe9a6;margin:14px 0 0}
+.chestp{display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:#000!important}
+#cbig{display:grid;place-items:center}
+.chestp h2{font-size:34px;color:#ffe08a;font-weight:900}
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
+.item{background:#000;border:1px solid var(--line);padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;transition:border-color .2s,box-shadow .2s}
+.item:hover{border-color:var(--gold2)}
+.item .ii{background:#000}
+.item b{font:700 14px Cinzel;letter-spacing:.05em;color:#f0e2c2}
+.item p{margin:0;font-size:15px;line-height:1.35;color:var(--mut);flex:1}
+.item .have{font:700 12px Cinzel;color:var(--gold)}
+.item.eqd{border-color:var(--gold)}
+.btn.sm2{padding:9px 16px;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin:4px 0 0}
+.btn.dis{filter:grayscale(1) brightness(.6);cursor:not-allowed}
+.port.aura img{animation:aura 3.5s ease-in-out infinite}
+/* resplandor exterior del retrato */
+.port{border:0!important;box-shadow:none!important;background:#000}
+@keyframes aura{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.25) saturate(1.25) sepia(.15)}}
+.ban{display:inline-block;vertical-align:middle;margin-right:6px}
+@media (max-width:560px){.chestp{grid-template-columns:90px 1fr}#cbig svg{width:86px;height:86px}.shop{grid-template-columns:repeat(2,1fr)}}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:12px;align-items:end;margin-top:14px}
+.pod{position:relative;text-align:center;padding:16px 8px 0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.pod b{font:700 17px Cinzel;color:#f0e2c2;letter-spacing:.04em;word-break:break-word}
+.pod small{color:var(--mut);font-size:14px}.pod span{font:700 15px Cinzel;color:#ffe08a}
+.pod i{display:block;width:100%;margin-top:10px;background:linear-gradient(#1c1410,#0a0706);border-top:2px solid var(--gold2)}
+.pod.p1 i{height:90px;border-color:#e8c46c}.pod.p2 i{height:62px;border-color:#c9ced6}.pod.p3 i{height:44px;border-color:#b06a35}
+.medal{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:900 20px Cinzel;color:#1a1008;margin-bottom:4px}
+.medal.oro{background:radial-gradient(circle at 35% 30%,#fff3c0,#e2a93a 60%,#8a5a12);width:56px;height:56px;font-size:24px}
+.medal.plata{background:radial-gradient(circle at 35% 30%,#fff,#c9ced6 60%,#6f7680)}
+.medal.bronce{background:radial-gradient(circle at 35% 30%,#ffd9b8,#b06a35 60%,#5e3014)}
+.pod.me b,.rlist .me b{color:#ffe08a}
+.rlist{margin:14px 0 0;padding-left:28px;color:var(--mut)}
+.rlist li{padding:5px 0;border-bottom:1px solid #1a1210}.rlist li b{color:var(--ink);font-weight:500}.rlist li span{margin-left:10px;font-size:15px}.rlist li em{float:right;font-style:normal;color:var(--gold)}
+.mypos{margin:16px 0 0;font-size:18px}.mypos b{color:#ffe08a;font:900 22px Cinzel}
+.code{margin:10px 0 0}.code b{font:700 18px Cinzel;letter-spacing:.15em;color:var(--gold);white-space:nowrap}
+.rec{max-width:560px;margin:22px auto 0;text-align:center}.rec summary{cursor:pointer;color:var(--gold);font-size:17px}
+.rec input{display:inline-block;max-width:220px;margin:12px 6px 0 0;padding:11px;background:#000;border:1px solid var(--gold2);color:var(--ink);font:700 16px Cinzel;text-align:center;letter-spacing:.15em;text-transform:uppercase}
+@media (max-width:560px){.pod b{font-size:14px}.pod small{font-size:12px}.medal.oro{width:46px;height:46px}}
+.how{text-align:left;margin-top:18px}
+.intro{margin-top:18px}.intro summary{list-style:none;cursor:pointer;text-align:center}.intro summary::-webkit-details-marker{display:none}.intro .cover{margin-bottom:10px}.intro[open] summary .btn{display:none}
+.hl{margin:8px 0 0;padding-left:20px}
+.hl li{margin:0 0 8px}
+/* lección */
+.ov{position:fixed;inset:0;z-index:20;overflow:auto;background:radial-gradient(900px 420px at 50% -60px,rgba(160,40,20,.35),transparent 70%),var(--bg)}
+.ov .top{position:sticky;top:0;z-index:2;background:rgba(5,3,4,.94);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;gap:12px}
+.ov .top .cz{flex:1;font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.x{width:38px;height:38px;border:1px solid var(--gold2);color:var(--gold);font-size:17px}
+.lh{text-align:center;padding:44px 0 6px}
+.lh h2{font-size:clamp(34px,9vw,64px);font-weight:900;text-transform:uppercase;color:#f0e2c2;line-height:1;text-shadow:0 0 50px rgba(200,60,30,.55)}
+.lead{font-size:23px;font-style:italic;text-align:center;max-width:640px;margin:16px auto;color:#e9dcc0}
+.chap h3{font-size:20px;color:var(--gold);margin-bottom:6px}
+.chap .n{font:700 12px Cinzel;letter-spacing:.3em;color:var(--red2)}
+.chap p{margin:0}
+.chap p:first-letter{font:900 2.9em/0.85 Cinzel;float:left;padding:6px 8px 0 0;color:var(--red2)}
+.key{text-align:center;border-color:var(--gold2)}
+.key .cz{font-size:22px;color:#f0e2c2;font-weight:700;letter-spacing:.03em}
+/* cine */
+.cine{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.vid{position:relative;display:flex;flex-direction:column;justify-content:flex-end;aspect-ratio:16/9;padding:14px;text-decoration:none;color:var(--ink);border:1px solid var(--gold2);overflow:hidden;
+ background:radial-gradient(circle at 50% 40%,rgba(200,60,30,.38),transparent 55%),linear-gradient(160deg,#241410,#070506)}
+.vid:before{content:attr(data-e);position:absolute;right:-6px;top:-18px;font-size:120px;opacity:.13;filter:grayscale(1)}
+.vid i{position:absolute;left:50%;top:42%;width:62px;height:62px;margin:-31px;border:2px solid var(--gold);border-radius:50%;background:rgba(0,0,0,.55);transition:.2s}
+.vid i:after{content:"";position:absolute;left:24px;top:17px;border:13px solid transparent;border-left:20px solid var(--gold);border-right:0}
+.vid:hover i{background:var(--red);box-shadow:0 0 30px rgba(220,70,30,.8);transform:scale(1.08)}
+.vid b{font:700 16px Cinzel;letter-spacing:.05em;position:relative}
+.vid small{font-size:14px;color:var(--mut);position:relative}
+.theater{display:grid;gap:22px}
+.player{margin:0;border:1px solid var(--gold2);background:#000;box-shadow:0 0 40px rgba(140,30,15,.35)}
+.player .scr{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;background:radial-gradient(circle at 50% 45%,rgba(200,60,30,.4),transparent 60%),#070506;overflow:hidden;padding:0}
+.player img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9)}
+.player button.scr i{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px;border:2px solid var(--gold);border-radius:50%;background:rgba(0,0,0,.6);transition:.2s}
+.player button.scr i:after{content:"";position:absolute;left:32px;top:23px;border:18px solid transparent;border-left:27px solid var(--gold);border-right:0}
+.player button.scr:hover i{background:var(--red);box-shadow:0 0 40px rgba(220,70,30,.9);transform:scale(1.08)}
+.player figcaption{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line);background:var(--p1)}
+.player figcaption b{font:700 16px Cinzel;letter-spacing:.05em}
+.player figcaption small{color:var(--mut);font-size:15px}
+ul.eps{list-style:none;padding:0;margin:10px 0 0;columns:2;column-gap:24px;font-size:17px}
+ul.eps li{padding:3px 0;break-inside:avoid}
+ul.eps li:before{content:"◆ ";color:var(--red2);font-size:11px}
+/* desafío */
+.q{font:700 22px/1.35 Cinzel;letter-spacing:.02em;color:#f0e2c2;margin:4px 0 16px}
+.opt{display:block;width:100%;text-align:left;padding:14px 18px;margin:10px 0;background:#0a0707;border:1px solid var(--line);font-size:20px}
+.opt:hover{border-color:var(--gold2)}
+.opt.ok{border-color:var(--ok);background:rgba(127,191,106,.12)}
+.opt.bad{border-color:var(--bad);background:rgba(210,85,63,.14)}
+.res{text-align:center;padding-top:30px}
+.res .port{width:230px;margin:18px auto;animation:rise .9s}
+.res h2{font-size:clamp(28px,7vw,46px);font-weight:900;text-transform:uppercase;color:#f0e2c2}
+@keyframes rise{0%{opacity:0;transform:scale(.85);filter:brightness(3)}}
+.vt h3{font-size:17px;color:var(--gold);margin:22px 0 10px}
+@media (max-width:560px){body{font-size:19px}.hero{grid-template-columns:104px 1fr;gap:14px}.hero h2{font-size:22px}.big{grid-template-columns:1fr}.big .port{max-width:230px;margin:0 auto}ul.eps{columns:1}.hd h1{font-size:13px}.btn{padding:13px 22px;font-size:13px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header id="hdr" hidden>
+  <div class="hd"><h1>Guardianes de la Palabra</h1><span class="chip" id="cnt"></span><button class="chip gchip" id="hchest" data-v="cofre" title="Tu cofre de oro"></button><button class="chip" id="who"></button></div>
+  <div id="xpb" title="Avance total"><i></i><span></span></div>
+  <nav><button data-v="camino">Camino</button><button data-v="guardian">Mi guardián</button><button data-v="videos">Videoteca</button><button data-v="cofre">Cofre</button></nav>
+</header>
+<main class="wrap" id="app"></main>
+<div id="ov"></div>
+<div id="pv" aria-hidden="true"></div>
+<script src="base.js"></script>
+<script src="extra1.js"></script>
+<script src="extra2.js"></script>
+<script src="videos.js"></script>
+<script src="preguntas1.js"></script>
+<script src="preguntas2.js"></script>
+<script src="preguntas3.js"></script>
+<script src="experto1.js"></script>
+<script src="experto2.js"></script>
+<script src="experto3.js"></script>
+<script src="cofre.js"></script>
+<script>
+const RO=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+const LV=['Peregrino','Escudero','Centinela','Caballero','Paladín','Campeón','Protector','Portador de la Luz','Heraldo del Reino','Guardián de la Palabra'];
+const SW=[[0,'Daga Herrumbrosa'],[6,'Espada Larga de Acero'],[12,'Espada de Cruzada'],[18,'Hoja de Obsidiana'],[24,'Espada Alada'],[30,'Filo de Tormenta'],[36,'Ceniza de Dragón'],[42,'Garra de León'],[50,'Eclipse Celestial'],[60,'Destructor de Mundos']];
+const swi=n=>SW.indexOf(tier(SW,n))+1;
+const YL=[[0,'Yelmo del Heraldo Celestial'],[2,'Celada de la Cruz Celestial'],[5,'Yelmo Gótico de la Esencia Celestial'],[9,'Capucha de la Sombra Celestial'],[14,'Yelmo de la Valquiria Celestial'],[20,'Visor del Fuego Celestial'],[27,'Yelmo de la Corona Celestial'],[35,'Yelmo de la Aurora Celestial'],[44,'Yelmo del Núcleo Celestial'],[55,'Yelmo de Luz Celestial']];
+const perf=()=>L.filter((_,i)=>(P().done[i+1]||0)>=NQ).length;
+const yli=n=>YL.indexOf(tier(YL,n))+1;
+const GM=['Gema del Heraldo','Ojo de la Cruz','Esencia Gótica','Sombra Lunar','Pluma de Valquiria','Fuego Estelar','Ojo de León','Aurora Boreal','Núcleo de Vacío','Corazón de Luz','Lágrima de Cometa','Anillo de Constelación'];
+const totOK=()=>L.reduce((s,_,i)=>s+(P().done[i+1]||0),0);
+const gemN=()=>Math.min(GM.length,Math.floor(totOK()/25));
+function fig(src,name,own,cur,req,cap){
+  return `<figure tabindex="0" class="${cur?'cur':own?'on':'off'}" data-src="${src}" data-n="${name}" data-r="${own?'Conseguido':req}"><img src="${src}" alt="${name}${own?'':' (bloqueado)'}" loading="lazy"><figcaption>${cap}</figcaption></figure>`;
+}
+function gemas(){
+  const k=gemN(),t=totOK();
+  return `<p class="sm" style="margin:0 0 6px"><b class="gold">${k}</b> de ${GM.length} gemas · ${t} de 300 respuestas correctas${k<GM.length?`. Con ${(k+1)*25-t} respuestas correctas más ganas <b class="gold">${GM[k]}</b>.`:'. ¡Tienes todas las gemas!'}</p>
+  <div class="armory gm">${GM.map((g,i)=>fig(`img/g${i+1}.jpg`,g,i+1<=k,false,`Se gana con ${(i+1)*25} respuestas correctas`,i+1<=k?g:(i+1)*25+' correctas')).join('')}</div>`;
+}
+function helm(){
+  const n=perf(),k=yli(n),nx=YL[k];
+  return `<div class="forge hf"><div class="blade"><img src="img/y${k}.jpg" alt="${YL[k-1][1]}"></div><div><div class="cz gold" style="font-size:13px;letter-spacing:.3em">YELMO ${RO[k-1]} DE X</div><p style="margin:6px 0 0">${n} desafíos perfectos (las ${NQ} preguntas correctas).</p><p class="mut sm" style="margin:6px 0 0">${nx?`Con ${nx[0]} desafíos perfectos ganas <b class="gold">${nx[1]}</b>. Puedes repetir un libro para lograr el perfecto.`:'Tienes el yelmo más alto.'}</p></div></div>
+  <div class="eyebrow" style="margin-top:20px">Yelmos</div><div class="armory helm">${YL.map((s,i)=>fig(`img/y${i+1}.jpg`,s[1],i+1<=k,i+1===k,`Se gana con ${s[0]} desafíos perfectos`,`<b>${RO[i]}</b>${i+1<=k?s[1]:s[0]+' perfectos'}`)).join('')}</div>`;
+}
+const NQ=5,PASS=3;
+
+/* ---------- estado ---------- */
+const KEY='guardianes-palabra-v2';
+let S={players:{},cur:null},view='camino';
+try{
+  const r=localStorage.getItem(KEY);
+  if(r)S=JSON.parse(r);
+  else{const o=JSON.parse(localStorage.getItem('guardianes-palabra-v1')||'null');
+    if(o&&o.players){S=o;for(const n in S.players){const d=S.players[n].done||{};for(const k in d)d[k]=d[k]>=3?5:d[k]===2?3:d[k]}}}
+}catch(e){}
+const store=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const save=()=>{if(S.cur&&S.players[S.cur])S.players[S.cur].updated=Date.now();store();queueSync()};
+const P=()=>S.players[S.cur];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=s=>document.querySelector(s);
+const eraOf=id=>ERAS.findIndex(e=>id>=e.a&&id<=e.b);
+const passed=id=>(P().done[id]||0)>=PASS;
+const count=()=>L.filter((_,i)=>passed(i+1)).length;
+const eraDone=e=>{for(let i=e.a;i<=e.b;i++)if(!passed(i))return false;return true};
+const eras=()=>ERAS.filter(eraDone).length;
+const level=()=>Math.min(10,1+eras());
+const open=id=>P().free||id===1||passed(id)||passed(id-1);
+const tier=(T,n)=>T.filter(t=>n>=t[0]).pop();
+const gem=(c,cls='gem')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 9 12 22 3 9Z" fill="${c}" stroke="#fff" stroke-opacity=".6"/><path d="M3 9h18M12 2 8 9l4 13 4-13Z" fill="none" stroke="#fff" stroke-opacity=".4"/></svg>`;
+const W=()=>{const p=P();if(p.xp==null)p.xp=estXp(p);p.gold=p.gold||0;p.inv=p.inv||{};p.own=p.own||{};p.eq=p.eq||{};
+  const R={marco_bronce:120,marco_plata:300,marco_oro:600};for(const k in R)if(p.own[k]){p.gold+=R[k];delete p.own[k]}if(p.eq.marco)delete p.eq.marco;return p};
+const eqc=()=>{if(!S.cur||!P())return '';return W().eq.aura?' aura':''};
+const titl=()=>{const e=S.cur&&P()?W().eq:{};const it=SHOP.find(x=>x.id===e.tit);return it?' '+it.v:''};
+const port=(n,cls='')=>`<div class="port ${cls}${eqc()}"><img src="img/n${n}.jpg" alt="Guardián nivel ${n}: ${LV[n-1]}"></div>`;
+const div='<div class="div"><span></span></div>';
+
+/* ---------- espada ---------- */
+function sword(){
+  const n=count(),k=swi(n),full=Math.floor(n/5);
+  let g='';for(let i=0;i<12;i++){const on=i<full;g+=gem(on?ERAS[Math.min(9,eraOf(i*5+5))].c:'#2a1d14')}
+  return `<div class="forge"><div class="blade"><img src="img/e${k}.jpg" alt="${SW[k-1][1]}"></div><div><div class="cz gold" style="font-size:13px;letter-spacing:.3em">ARMA ${RO[k-1]} DE X</div><div class="gems" aria-label="${full} de 12 gemas en la hoja">${g}</div><p class="mut sm" style="margin:6px 0 0">Gemas en la hoja: ${full} de 12 (una cada 5 libros).</p></div></div>
+  <div class="eyebrow" style="margin-top:20px">Armería</div><div class="armory">${SW.map((s,i)=>fig(`img/e${i+1}.jpg`,s[1],i+1<=k,i+1===k,`Se gana con ${s[0]} libros superados`,`<b>${RO[i]}</b>${i+1<=k?s[1]:s[0]+' libros'}`)).join('')}</div>`;
+}
+
+/* ---------- vistas ---------- */
+function render(){
+  $('#hdr').hidden=!S.cur;
+  if(!S.cur)return welcome();
+  $('#who').textContent=S.cur;
+  const xb=$('#xpb i');if(xb){xb.style.width=(count()/60*100)+'%';$('#xpb span').textContent='Avance '+Math.round(count()/60*100)+'%'}
+  $('#cnt').textContent='Nivel '+level()+' · '+count()+'/60 · '+MODES[mode()].n;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===view));
+  $('#hchest').innerHTML=ico('cofre',18)+'<b>'+W().gold+'</b>';
+  $('#app').innerHTML=view==='camino'?camino():view==='guardian'?guardian():view==='cofre'?cofre():videos();
+}
+function heroFull(cls=''){
+  let e='';for(let i=0;i<14;i++)e+=`<i style="left:${(i*37+11)%100}%;animation-delay:${(i*1.3)%9}s;animation-duration:${9+(i*7)%8}s"></i>`;
+  return `<div class="herofull ${cls}"><img src="img/portada.jpg" alt="Armor of the Spirit · Bible mini game"><div class="embers">${e}</div><div class="shade"></div><button class="cue" type="button" data-cue aria-label="Bajar">Comienza tu viaje<span>⌄</span></button></div>`;
+}
+function intro(){
+  return `<div id="start"></div>
+  <div class="verse"><p>“Vístanse de toda la armadura de Dios, para que puedan estar firmes.”</p><span>Efesios 6:11</span></div>
+  <div class="eyebrow" style="margin-top:22px">Cómo se juega</div>
+  <div class="steps">
+    <div><b><i>1</i></b><h4>Lee</h4><p>Cada libro de la Biblia trae su historia, una idea clave y videos.</p></div>
+    <div><b><i>2</i></b><h4>Responde</h4><p>Supera el desafío de 5 preguntas. Con 3 avanzas; con 5, es perfecto.</p></div>
+    <div><b><i>3</i></b><h4>Revístete</h4><p>Gana piezas de armadura y avanza libro por libro, del Génesis al Apocalipsis.</p></div>
+  </div>
+  <div class="eyebrow" style="margin-top:22px">Lo que conseguirás</div>
+  <div class="goals">
+    <div><img src="img/e10.jpg" alt=""><p><b>La espada del Espíritu</b>Es la Palabra de Dios. Cada libro superado forja una espada mejor.</p></div>
+    <div><img src="img/y10.jpg" alt=""><p><b>El casco de la salvación</b>Cada desafío perfecto te da un yelmo nuevo.</p></div>
+    <div><img src="img/g10.jpg" alt=""><p><b>Gemas de la Palabra</b>Cada 25 respuestas correctas suman una gema a tu relicario.</p></div>
+    <div><img src="img/n10.jpg" alt=""><p><b>Un guardián firme</b>Cada acto completo sube tu nivel, hasta ser Guardián de la Palabra.</p></div>
+  </div>`;
+}
+function modePick(){
+  const cur=P().mode;
+  $('#ov').innerHTML=`<div class="ov"><div class="wrap" style="text-align:center;padding-top:40px">
+  <div class="eyebrow">${esc(S.cur)}, antes de comenzar</div><h2 style="font-size:clamp(28px,6vw,44px);color:#f0e2c2;text-transform:uppercase">¿En qué modo vas a jugar?</h2>${div}
+  <div class="modes">${Object.entries(MODES).map(([k,m])=>`<button class="mode ${cur===k?'sel':''}" data-mode="${k}"><img src="${m.img}" alt=""><div class="mt"><b>${m.n}</b><small>Modo ${m.r}</small></div><span>${m.d}</span></button>`).join('')}</div>
+  <p class="mut sm" style="margin-top:18px">Puedes cambiar el modo cuando quieras en «Mi guardián».</p></div></div>`;
+}
+function welcome(){
+  const names=Object.keys(S.players);
+  $('#app').innerHTML=`${heroFull()}<div class="wel">${intro()}
+  ${names.length?`<p class="mut sm">Guardianes que ya comenzaron el camino:</p><p>${names.map(n=>`<button class="btn sec" data-pl="${esc(n)}">${esc(n)}</button>`).join('')}</p><p class="mut sm">o comienza uno nuevo:</p>`:''}
+  <details class="rec"><summary>¿Ya jugaste en otro dispositivo? Recupera tu avance con tu código</summary><div><input id="rcode" maxlength="9" placeholder="Código de guardián" autocomplete="off" aria-label="Código de guardián"><button class="btn sec" type="button" id="rec">Recuperar</button><p class="sm mut" id="recmsg"></p></div></details>
+  <form id="nf"><div class="eyebrow" style="margin-top:26px">Elige tu modo de juego</div>
+  <div class="modes" role="radiogroup" aria-label="Modo de juego">${Object.entries(MODES).map(([k,m])=>`<label class="mode ${k==='normal'?'sel':''}"><input type="radio" name="md" value="${k}" ${k==='normal'?'checked':''}><img src="${m.img}" alt=""><div class="mt"><b>${m.n}</b><small>Modo ${m.r}</small></div><span>${m.d}</span></label>`).join('')}</div>
+  <div class="eyebrow" style="margin-top:26px">Tu nombre de guardián</div>
+  <input id="nm" maxlength="20" placeholder="Tu nombre" autocomplete="off" aria-label="Tu nombre"><button class="btn">Comenzar el viaje</button></form></div>`;
+}
+function heroCard(){
+  const lv=level(),e=ERAS.find(x=>!eraDone(x));let pr=100,txt='Has completado todo el camino.';
+  if(e){let d=0;for(let i=e.a;i<=e.b;i++)if(passed(i))d++;const t=e.b-e.a+1;pr=d/t*100;txt=lv<10?`${d} de ${t} libros del acto “${e.n}” para subir a nivel ${lv+1}`:`${d} de ${t} libros para completar el último acto`}
+  return `<div class="panel hero">${port(lv)}<div><div class="eyebrow">Nivel ${lv}</div><h2>${W().eq.est?`<span class="ban">${ico(W().eq.est,34)}</span>`:''}${esc(S.cur)}${titl()}, ${LV[lv-1]}</h2><div class="bar"><i style="width:${pr}%"></i></div><div class="mut sm">${txt}</div><div class="sm" style="margin-top:6px">${SW[swi(count())-1][1]} · ${YL[yli(perf())-1][1]}</div></div></div>`;
+}
+function camino(){
+  const next=L.findIndex((_,i)=>!passed(i+1))+1;
+  return `<details class="intro" ${count()?'':'open'}><summary>${heroFull('short')}<span class="btn sec">Cómo se juega y la armadura de Dios</span></summary><div class="wel" style="padding-top:0">${intro()}</div></details>`+heroCard()+ERAS.map((e,ei)=>{
+    let h=`<section><div class="era-h"><div class="eyebrow">Acto ${RO[ei]}</div><h2>${e.n}</h2><div class="mut">${e.d}</div><div class="sm" style="margin-top:4px">${gem(eraDone(e)?e.c:'#3b2a1b')} <span class="${eraDone(e)?'gold':'mut'}">${eraDone(e)?'Acto completado':(e.b-e.a+1)+' libros'}</span></div></div><div class="path">`;
+    for(let id=e.a;id<=e.b;id++){const l=L[id-1],d=passed(id),o=open(id),sc=P().done[id]||0;
+      h+=`<button class="node ${d?'done':o?(id===next?'open':''):'lock'}" style="--gc:${e.c}" ${o?`data-l="${id}"`:'disabled'}><span class="dia"><b>${o?l[1]:'🔒'}</b></span><span class="t">${l[0]}<small>${d?(sc>=NQ?'Desafío perfecto':'Superado · aún puedes lograr el perfecto'):o?'Listo para comenzar':'Supera el libro anterior'}</small></span>${d?gem(e.c):''}</button>`}
+    return h+'</div></section>'}).join('');
+}
+function guardian(){
+  const n=count(),ne=eras(),lv=level(),sw=tier(SW,n),nx=SW.find(t=>t[0]>n),stars=L.filter((_,i)=>P().done[i+1]>=NQ).length;
+  return `<div class="panel big">${port(lv)}<div><div class="eyebrow">Nivel ${lv} de 10</div><h2 style="font-size:32px;font-weight:900;color:#f0e2c2">${LV[lv-1]}</h2><p>${esc(S.cur)} ha superado <b class="gold">${n}</b> de 60 libros, con <b class="gold">${stars}</b> desafíos perfectos.</p><p class="mut sm">Cada acto completo del camino sube un nivel a tu guardián y le da armadura nueva.</p></div></div>
+  <div class="panel tre" id="rank">${rankPanel()}</div>
+  <div class="panel tre"><div class="eyebrow">Evolución</div><div class="gal" style="margin-top:12px">${LV.map((t,i)=>fig(`img/n${i+1}.jpg`,'Nivel '+(i+1)+': '+t,i+1<=lv,i+1===lv,`Se alcanza al completar ${i} ${i===1?'acto':'actos'} del camino`,`<b>${RO[i]}</b>${t}`)).join('')}</div></div>
+  <div class="panel tre"><div class="eyebrow">La espada</div><h3 style="font-size:24px;color:#f0e2c2">${sw[1]}</h3><p class="mut sm">“La espada del Espíritu, que es la Palabra de Dios” (Efesios 6:17). Cada libro superado te acerca a un arma nueva${nx?`: con ${nx[0]} libros ganas <b class="gold">${nx[1]}</b>`:''}.</p>${sword()}</div>
+  <div class="panel tre"><div class="eyebrow">El yelmo</div><h3 style="font-size:24px;color:#f0e2c2">${YL[yli(perf())-1][1]}</h3><p class="mut sm">“Tomen el casco de la salvación” (Efesios 6:17). Cada desafío perfecto te acerca a un yelmo nuevo.</p>${helm()}</div>
+  <div class="panel tre"><div class="eyebrow">El relicario de gemas</div><h3 style="font-size:24px;color:#f0e2c2">Doce gemas de la Palabra</h3><p class="mut sm">Cada 25 respuestas correctas en tus desafíos te acercan a una gema nueva para tu relicario.</p>${gemas()}</div>
+    <div class="panel"><div class="eyebrow">Para papás y maestros</div><p class="sm mut">El progreso se guarda en este dispositivo y navegador, por cada nombre.</p>
+  <p><label class="sm"><input type="checkbox" id="free" ${P().free?'checked':''}> Desbloquear todos los libros (modo maestro)</label></p>
+  <p class="sm">Modo de juego: <b class="gold">${MODES[mode()].n}</b></p><button class="btn sec" id="md">Cambiar modo</button><button class="btn sec" id="sw">Cambiar de guardián</button><button class="btn sec" id="rs">Reiniciar progreso</button></div>`;
+}
+const EMBED=!/claude|anthropic/i.test(location.hostname);
+const POSTER='https://d1bsmz3sdihplr.cloudfront.net/media/posters/';
+function player(title,src,sub,slug){
+  const poster=src.yt?`https://i.ytimg.com/vi/${src.yt}/hqdefault.jpg`:src.mp4?POSTER+slug+'.es.jpg':'';
+  const attrs=src.yt?`data-yt="${src.yt}"`:src.list?`data-list="${src.list}"`:`data-mp4="${src.mp4}"`;
+  return `<figure class="player"><button class="scr" ${attrs} aria-label="Reproducir ${title}">${poster?`<img src="${poster}" alt="" loading="lazy" onerror="this.remove()">`:''}<i></i></button><figcaption><b>${title}</b><small>${sub}</small></figcaption></figure>`;
+}
+function cine(id){
+  const l=L[id-1];let h='';
+  const main=V[id].filter(v=>VS[v[1]]),extra=V[id].filter(v=>!VS[v[1]]);
+  if(EMBED){
+    h+='<div class="theater">'+main.map(v=>player(v[0],VS[v[1]],VS[v[1]].yt?'Proyecto Biblia · YouTube':'Proyecto Biblia · BibleProject',v[1])).join('')+'</div>';
+    if(NUTYT[id])h+=`<div class="eyebrow" style="margin:26px 0 10px">Bible in a Nutshell</div><div class="theater">${NUTYT[id].map((y,i)=>player('Episodio '+(i+1),{yt:y},'Bible in a Nutshell · en inglés')).join('')}</div>`;
+    else if(NUT[id])h+=`<div class="eyebrow" style="margin:26px 0 10px">Bible in a Nutshell</div><div class="theater">${player('Películas animadas de Bible in a Nutshell',{list:NUT_CHANNEL},'Canal completo · en inglés')}</div>`;
+  }else{
+    h+='<p class="sm mut" style="margin:0 0 12px;text-align:center">Los videos se reproducen dentro de la lección cuando el curso está publicado en tu propio sitio. Aquí se abren en una pestaña nueva.</p><div class="cine">'+main.map(v=>{const s=VS[v[1]];return `<a class="vid" data-e="${l[1]}" href="${s.yt?'https://www.youtube.com/watch?v='+s.yt:'https://bibleproject.com/es/videos/'+v[1]+'/'}" target="_blank" rel="noopener"><i></i><b>${v[0]}</b><small>Proyecto Biblia</small></a>`}).join('')+'</div>';
+  }
+  if(extra.length)h+=`<p class="sm mut" style="margin:16px 0 0">Más videos de este libro en BibleProject:</p><ul class="eps">${extra.map(v=>`<li><a href="https://bibleproject.com/es/videos/${v[1]}/" target="_blank" rel="noopener">${v[0]}</a></li>`).join('')}</ul>`;
+  if(NUT[id])h+=`<p class="sm mut" style="margin:16px 0 0">Historias de este libro en Bible in a Nutshell (en inglés):</p><ul class="eps">${NUT[id].map(v=>`<li><a href="${NS+v[1]}.html" target="_blank" rel="noopener">${v[0]}</a></li>`).join('')}</ul>`;
+  return h+`<p class="sm" style="margin:14px 0 0"><a href="${BP+l[2]}/" target="_blank" rel="noopener">Guía completa de ${l[0]} en BibleProject →</a></p>`;
+}
+function play(b){
+  const d=b.dataset,f=b.parentNode;let el;
+  if(d.mp4){el=document.createElement('video');el.controls=true;el.autoplay=true;el.playsInline=true;el.src=`https://stream.mux.com/${d.mp4}/high.mp4`;}
+  else{el=document.createElement('iframe');el.src=d.yt?`https://www.youtube-nocookie.com/embed/${d.yt}?autoplay=1&rel=0&hl=es`:`https://www.youtube-nocookie.com/embed/videoseries?list=${d.list}&autoplay=1&rel=0`;el.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';el.allowFullscreen=true;el.title='Video';}
+  el.className='scr';b.replaceWith(el);
+}
+function cofre(){
+  const p=W(),cons=SHOP.filter(x=>x.c),cos=SHOP.filter(x=>!x.c);
+  const card=x=>{const own=!x.c&&p.own[x.id],eq=own&&(x.g==='aura'?p.eq.aura:p.eq[x.g]===x.id),can=p.gold>=x.p;
+    return `<div class="item ${own?'own':''} ${eq?'eqd':''}" data-item="${x.id}"><div class="ii">${ico(x.ico,64)}</div><b>${x.t}</b><p>${x.d}</p>
+    ${x.c?`<small class="have">Tienes: ${p.inv[x.id]||0}</small>`:''}
+    ${own?`<button class="btn sec sm2" data-eq="${x.id}">${eq?'Quitar':'Equipar'}</button>`:`<button class="btn sm2 ${can?'':'dis'}" data-buy="${x.id}" ${can?'':'disabled'}>${ico('moneda',18)} ${x.p}</button>`}</div>`};
+  return `<div class="panel chestp"><div id="cbig">${ico('cofre',120)}</div><div><div class="eyebrow">Tu cofre</div><h2><span id="cchest">${p.gold}</span> de oro</h2>
+  <p class="sm mut">Ganas oro con cada respuesta correcta: ${MULT.facil} en Fácil, ${MULT.normal} en Normal y ${MULT.experto} en Experto. Además, +25 al superar un libro por primera vez y +50 por cada desafío perfecto nuevo.</p></div></div>
+  <div class="eyebrow" style="margin-top:26px">Ayudas para los desafíos</div><div class="shop">${cons.map(card).join('')}</div>
+  <div class="eyebrow" style="margin-top:26px">Para tu guardián</div><div class="shop">${cos.map(card).join('')}</div>`;
+}
+function buy(id){const x=SHOP.find(i=>i.id===id),p=W();if(!x||p.gold<x.p)return;p.gold-=x.p;if(x.c)p.inv[id]=(p.inv[id]||0)+1;else{p.own[id]=true;if(x.g==='aura')p.eq.aura=true;else p.eq[x.g]=id}save();
+  const from=document.getElementById('cbig'),to=document.querySelector(`[data-item="${id}"] .ii`);goldFlow(from,to,12,()=>{render();const el=document.querySelector(`[data-item="${id}"]`);if(el){el.classList.add('flash');plus(el,x.c?'+1':'¡Nuevo!')}});
+  const c=document.getElementById('cchest');if(c)c.textContent=p.gold;$('#hchest').innerHTML=ico('cofre',18)+'<b>'+p.gold+'</b>'}
+function equip(id){const x=SHOP.find(i=>i.id===id),p=W();if(x.g==='aura')p.eq.aura=!p.eq.aura;else p.eq[x.g]=p.eq[x.g]===id?'':id;save();render()}
+function videos(){
+  return `<p class="mut" style="margin-top:22px;text-align:center">Todos los videos del curso, en el orden del camino.</p>`+ERAS.map((e,ei)=>{
+    let h=`<div class="panel vt"><div class="eyebrow">Acto ${RO[ei]}</div><h2 style="font-size:24px;color:#f0e2c2">${e.n}</h2>`;
+    for(let id=e.a;id<=e.b;id++)h+=`<h3>${id}. ${L[id-1][0]}</h3>${cine(id)}`;
+    return h+'</div>'}).join('')+
+  `<div class="panel vt"><div class="eyebrow">Misiones extra</div>${EMBED?`<div class="theater" style="margin:14px 0">${player('La Biblia completa en resumen',{yt:NUT_FULL},'Bible in a Nutshell · en inglés')}${player('Todas las películas de Bible in a Nutshell',{list:NUT_CHANNEL},'Canal completo · en inglés')}</div>`:''}<ul class="eps" style="columns:1">
+  <li><a href="${BP}el-espiritu-santo/" target="_blank" rel="noopener">BibleProject · Tema: El Espíritu Santo</a></li>
+  <li><a href="${BP}adviento/" target="_blank" rel="noopener">BibleProject · Tema: Adviento</a></li>
+  <li><a href="https://www.youtube.com/watch?v=qixAMs4Deew" target="_blank" rel="noopener">Bible in a Nutshell · La Biblia completa en resumen (inglés)</a></li>
+  <li><a href="https://www.youtube.com/@BibleNutshells/videos" target="_blank" rel="noopener">Bible in a Nutshell · Canal de YouTube</a></li></ul></div>`;
+}
+
+/* ---------- lección y desafío ---------- */
+let Q=null;
+function lesson(id){
+  const l=L[id-1],x=X[id],ei=eraOf(id),e=ERAS[ei];
+  $('#ov').innerHTML=`<div class="ov"><div class="top"><button class="x" data-x aria-label="Cerrar">✕</button><span class="cz">Acto ${RO[ei]} · Libro ${id} de 60</span>${gem(passed(id)?e.c:'#3b2a1b')}</div><div class="wrap">
+  <div class="lh"><div class="eyebrow">${e.n}</div><h2>${l[0]}</h2></div>${div}
+  <p class="lead">${l[3]}</p>
+  ${x.s.map((c,i)=>`<div class="panel chap"><div class="n">Capítulo ${RO[i]}</div><h3>${c[0]}</h3><p>${c[1]}</p></div>`).join('')}
+  <div class="panel key"><div class="eyebrow">Idea clave</div><div class="cz">${l[4]}</div></div>
+  <div class="panel"><div class="eyebrow">El hilo hacia Jesús</div><p style="margin:6px 0 0">${x.j}</p></div>
+  ${div}<div class="eyebrow" style="text-align:center;margin-bottom:14px">Mira la historia</div>${cine(id)}
+  <div class="panel" style="margin-top:28px"><div class="eyebrow">Busca en tu Biblia</div><p style="margin:6px 0 0">Encuentra y lee <b class="gold">${l[5]}</b>. Léelo dos veces, despacio. ¿Qué te llama la atención? ¿Qué te muestra de cómo es Dios?</p></div>
+  <div style="text-align:center;margin-top:30px"><p>Modo <b class="gold">${MODES[mode()].n}</b>. El desafío tiene ${NQ} preguntas. Con ${PASS} correctas superas el libro; con ${NQ}, logras el desafío perfecto.</p><button class="btn" data-quiz="${id}">Comenzar el desafío</button></div></div></div>`;
+}
+const LAST={};
+function pick(arr,n,avoid){const sh=a=>a.slice().sort(()=>Math.random()-.5);const fresh=sh(arr.filter(q=>!avoid.has(q[0]))),used=sh(arr.filter(q=>avoid.has(q[0])));return fresh.concat(used).slice(0,n)}
+const MODES={facil:{n:'Fácil',r:'Escudero',img:'img/y1.jpg',d:'Preguntas sencillas con 3 opciones. Ideal para los más pequeños o para comenzar.'},
+normal:{n:'Normal',r:'Caballero',img:'img/y5.jpg',d:'Preguntas desafiantes con 4 opciones parecidas. Hay que leer con atención.'},
+experto:{n:'Experto',r:'Paladín',img:'img/y10.jpg',d:'Nombres, números y detalles de cada libro. Para verdaderos guardianes.'}};
+const mode=()=>MODES[P().mode]?P().mode:'normal';
+function startQuiz(id){
+  const avoid=new Set(LAST[id]||[]),easy=L[id-1][6].concat(X[id].q),hard=H[id]||[],exp=(typeof E!=='undefined'&&E[id])||[],m=mode();
+  let qs;
+  if(m==='facil')qs=pick(easy,NQ,avoid);
+  else if(m==='experto')qs=pick(exp,3,avoid).concat(pick(hard,NQ-Math.min(3,exp.length),avoid));
+  else qs=pick(hard,4,avoid).concat(pick(easy,NQ-Math.min(4,hard.length),avoid));
+  qs=qs.sort(()=>Math.random()-.5);
+  LAST[id]=qs.map(q=>q[0]);Q={id,i:0,ok:0,qs,res:[],earned:0};ask()}
+function ask(){
+  Q.used={};Q.shield=false;const q=Q.qs[Q.i],opts=q.slice(1).map((t,k)=>({t,ok:k===0})).sort(()=>Math.random()-.5);Q.opts=opts;Q.lock=false;
+  $('#ov').innerHTML=`<div class="ov"><div class="top"><button class="x" data-x aria-label="Cerrar">✕</button><span class="cz">Desafío · ${L[Q.id-1][0]}</span><span class="chip gchip" id="qchest">${ico('cofre',18)}<b>${W().gold}</b></span><span class="chip">${MODES[mode()].n}</span><span class="chip">${Q.i+1} / ${NQ}</span></div><div class="qbar">${Array.from({length:NQ},(_,j)=>`<span class="${Q.res[j]===1?'ok':Q.res[j]===0?'ko':j===Q.i?'now':''}"></span>`).join('')}</div><div class="qlbl"><span>${Q.ok} correctas</span><span>${Q.ok>=PASS?'¡Libro superado!':'Meta: '+PASS+' correctas'}</span></div><div class="wrap"><div class="panel" style="margin-top:22px"><div class="q">${q[0]}</div>${pwRow()}${opts.map((o,k)=>`<button class="opt" data-o="${k}">${o.t}</button>`).join('')}<div id="fb" style="min-height:74px;margin-top:14px"></div></div></div></div>`;
+}
+function pwRow(){const v=W().inv,it=[['pista','Usar pista'],['escudo',Q.shield?'Escudo activo':'Activar escudo'],['lampara','Encender lámpara']].filter(x=>(v[x[0]]||0)>0||(x[0]==='escudo'&&Q.shield));
+  if(!it.length)return '';
+  return `<div class="pw">${it.map(([k,t])=>`<button class="pwb ${k==='escudo'&&Q.shield?'on':''}" data-pw="${k}" ${(Q.used||{})[k]||(k==='escudo'&&Q.shield)?'disabled':''}>${ico(k,22)}<span>${t}</span><small>×${v[k]||0}</small></button>`).join('')}</div>${(Q.used||{}).lampara?`<p class="lamp">${ico('lampara',20)} «Lámpara es a mis pies tu palabra»: quedan dos caminos.</p>`:''}`}
+function usePw(k){const v=W().inv;if(!(v[k]>0)||Q.lock)return;Q.used=Q.used||{};if(Q.used[k])return;
+  if(k==='pista'){const opts=[...document.querySelectorAll('.opt')].filter((b,j)=>!Q.opts[j].ok&&!b.disabled);if(!opts.length)return;const b=opts[Math.floor(Math.random()*opts.length)];b.disabled=true;b.classList.add('gone')}
+  if(k==='lampara'){const w=[...document.querySelectorAll('.opt')].filter((b,j)=>!Q.opts[j].ok&&!b.disabled).sort(()=>Math.random()-.5);w.slice(1).forEach(b=>{b.disabled=true;b.classList.add('gone')})}
+  if(k==='escudo')Q.shield=true;
+  v[k]--;Q.used[k]=true;save();
+  const row=document.querySelector('.pw');if(row){const tmp=document.createElement('div');tmp.innerHTML=pwRow();row.nextElementSibling&&row.nextElementSibling.classList.contains('lamp')&&row.nextElementSibling.remove();row.replaceWith(...tmp.childNodes)}}
+function bumpChest(){document.querySelectorAll('#qchest b,#rchest b,#hchest b,#cchest').forEach(b=>{b.textContent=W().gold});document.querySelectorAll('#qchest,#rchest,#cbig').forEach(c=>{c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')})}
+function addGold(n,from,to){W().gold+=n;W().xp+=n;save();plus(from,'+'+n+' oro');goldFlow(from,to,Math.min(22,6+Math.round(n/3)),bumpChest)}
+function answer(k){
+  if(Q.lock)return;Q.lock=true;
+  const good0=Q.opts[k].ok;
+  if(!good0&&Q.shield){Q.shield=false;const b=document.querySelectorAll('.opt')[k];b.classList.add('bad');b.disabled=true;$('#fb').innerHTML=`<p class="shieldmsg">${ico('escudo',26)} El escudo de la fe te protegió. Intenta otra vez.</p>`;const pr=document.querySelector('.pwb.on');if(pr){pr.classList.remove('on');pr.querySelector('span').textContent='Escudo usado'}Q.lock=false;return}
+  const good=Q.opts[k].ok;if(good)Q.ok++;Q.res[Q.i]=good?1:0;
+  document.querySelectorAll('.opt').forEach((b,j)=>{if(Q.opts[j].ok)b.classList.add('ok');else if(j===k)b.classList.add('bad')});
+  $('#fb').innerHTML=`<p style="margin:0 0 8px;color:${good?'var(--ok)':'var(--bad)'}"><b>${good?'Correcto.':'No era esa. La respuesta correcta está marcada.'}</b></p><button class="btn" data-next>${Q.i<NQ-1?'Siguiente':'Ver resultado'}</button>`;
+  const seg=document.querySelectorAll('.qbar span')[Q.i],btn=document.querySelectorAll('.opt')[k];
+  const lbl=()=>{const l=document.querySelector('.qlbl');if(l)l.innerHTML=`<span>${Q.ok} correctas</span><span>${Q.ok>=PASS?'¡Libro superado!':'Meta: '+PASS+' correctas'}</span>`};
+  if(good){goldFlow(btn,seg,14,()=>{seg.className='ok flash';lbl()});setTimeout(()=>addGold(MULT[mode()],btn,$('#qchest')),250)}else{seg.className='ko';lbl()}
+}
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function plus(el,txt){if(RM||!el)return;const r=el.getBoundingClientRect(),p=document.createElement('div');p.className='plus';p.textContent=txt;p.style.left=(r.right-70)+'px';p.style.top=(r.top-6)+'px';document.body.appendChild(p);
+  p.animate([{transform:'translateY(0) scale(.6)',opacity:0},{transform:'translateY(-14px) scale(1.15)',opacity:1,offset:.25},{transform:'translateY(-48px) scale(1)',opacity:0}],{duration:1100,easing:'ease-out'}).onfinish=()=>p.remove()}
+function goldFlow(from,to,n,done){
+  if(!from||!to){done&&done();return}
+  if(RM){done&&done();return}
+  const a=from.getBoundingClientRect(),b=to.getBoundingClientRect();let left=n;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='gp';document.body.appendChild(p);
+    const x0=a.left+a.width*(.25+Math.random()*.5),y0=a.top+a.height*(.3+Math.random()*.4),x1=b.left+b.width*(.1+Math.random()*.8),y1=b.top+b.height/2;
+    const cx=(x0+x1)/2+(Math.random()-.5)*220,cy=Math.min(y0,y1)-60-Math.random()*120,fr=[];
+    for(let t=0;t<=1.0001;t+=.125){const u=1-t,x=u*u*x0+2*u*t*cx+t*t*x1,y=u*u*y0+2*u*t*cy+t*t*y1;fr.push({transform:`translate(${x}px,${y}px) scale(${1.3-t*.6})`,opacity:t<.1?t*10:1})}
+    p.animate(fr,{duration:650+Math.random()*350,delay:i*35,easing:'cubic-bezier(.4,0,.2,1)',fill:'both'}).onfinish=()=>{p.remove();if(--left===0&&done)done()};
+  }
+}
+function prog(T,n){const i=T.findIndex(t=>t[0]>n);if(i<0)return{f:1,lbl:'Completado'};const a=T[i-1][0],b=T[i][0];return{f:(n-a)/(b-a),lbl:`${n}/${b} · ${T[i][1]}`,tier:i}}
+function advRows(c,p,t){const g=Math.min(GM.length,Math.floor(t/25));
+  return [['Libros superados',c/60,`${c}/60`,c],
+  ['Próxima espada',prog(SW,c).f,prog(SW,c).lbl,swi(c)],
+  ['Próximo yelmo',prog(YL,p).f,prog(YL,p).lbl,yli(p)],
+  ['Próxima gema',g>=GM.length?1:(t%25)/25,g>=GM.length?'Completado':`${t%25}/25 · ${GM[g]}`,g]]}
+function animateAdv(before,after){
+  const rows=document.querySelectorAll('.adv .row'),src=document.querySelector('.res h2');
+  rows.forEach((r,i)=>{const bar=r.querySelector('i'),[,f0,,k0]=before[i],[,f1,,k1]=after[i];bar.style.width=(f0*100)+'%';
+    const grow=f1!==f0||k1!==k0;if(!grow)return;
+    setTimeout(()=>goldFlow(src,r.querySelector('.tr'),12,()=>{
+      bar.style.transition='width 1s cubic-bezier(.2,.8,.2,1)';
+      if(k1!==k0&&f1<1){bar.style.width='100%';setTimeout(()=>{bar.style.transition='none';bar.style.width='0';requestAnimationFrame(()=>{bar.style.transition='width .9s ease-out';bar.style.width=(f1*100)+'%'})},1050)}
+      else bar.style.width=(f1*100)+'%';
+      r.querySelector('.tr').classList.add('flash');r.querySelector('.lb span').textContent=after[i][2];
+    }),500+i*450)})}
+function result(){
+  const id=Q.id,e=ERAS[eraOf(id)],was=passed(id),lvWas=level(),swWas=tier(SW,count())[1],ylWas=yli(perf()),gWas=gemN();
+  const prevSc=P().done[id]||0,advB=advRows(count(),perf(),totOK());
+  P().done[id]=Math.max(P().done[id]||0,Q.ok);save();const advA=advRows(count(),perf(),totOK());
+  const win=Q.ok>=PASS,lvNow=level(),swNow=tier(SW,count())[1],allNow=eras()===10;
+  let extra='';const ylNow=yli(perf());const bonus=(win&&!was?25:0)+(Q.ok===NQ&&prevSc<NQ?50:0);
+  if(bonus)extra=`<p class="loot">${ico('moneda',24)} Botín del desafío: <b>+${bonus} de oro</b>${win&&!was?' por superar el libro':''}${Q.ok===NQ&&prevSc<NQ?(win&&!was?' y':'')+' por el desafío perfecto':''}</p>`+extra;
+  if(lvNow>lvWas)extra+=`<div class="eyebrow" style="margin-top:22px">Subes de nivel</div><h2>${LV[lvNow-1]}</h2>${port(lvNow)}<p>Completaste el acto “${e.n}”.</p>`;
+  else if(win&&!was&&eraDone(e))extra+=`<p>Completaste el acto “${e.n}”${allNow?'. ¡Recorriste toda la Biblia!':'.'}</p>`;
+  if(swNow!==swWas){const k=swi(count());extra+=`<div class="eyebrow" style="margin-top:22px">Nueva arma</div><h2>${swNow}</h2><div class="newsw"><img src="img/e${k}.jpg" alt="${swNow}"></div>`}
+  if(ylNow>ylWas)extra+=`<div class="eyebrow" style="margin-top:22px">Nuevo yelmo</div><h2>${YL[ylNow-1][1]}</h2><div class="newsw helmnew"><img src="img/y${ylNow}.jpg" alt="${YL[ylNow-1][1]}"></div>`;
+  if(gemN()>gWas){const g=gemN();extra+=`<div class="eyebrow" style="margin-top:22px">Nueva gema</div><h2>${GM[g-1]}</h2><div class="newsw helmnew"><img src="img/g${g}.jpg" alt="${GM[g-1]}"></div>`}
+  $('#ov').innerHTML=`<div class="ov"><div class="top"><button class="x" data-x aria-label="Cerrar">✕</button><span class="cz">${L[id-1][0]}</span><span class="chip gchip" id="rchest">${ico('cofre',18)}<b>${W().gold-bonus}</b></span></div><div class="wrap res">
+  <div class="eyebrow">${Q.ok} de ${NQ} correctas</div><h2>${win?(Q.ok===NQ?'Desafío perfecto':'Desafío superado'):'Aún no'}</h2>${div}
+  <p>${win?(was?'Ya habías ganado la gema de este libro.':'Ganaste una gema para tu espada.'):'Vuelve a leer los capítulos e inténtalo otra vez. Un guardián no se rinde.'}</p>
+  <div class="adv"><div class="eyebrow" style="text-align:center;margin-bottom:12px">Tu avance</div>${advB.map(r=>`<div class="row"><div class="lb"><b>${r[0]}</b><span>${r[2]}</span></div><div class="tr"><i></i></div></div>`).join('')}</div>${extra}
+  <p style="margin-top:22px">${win&&id<60?`<button class="btn" data-l="${id+1}">Siguiente libro</button>`:''}<button class="btn sec" data-quiz="${id}">${win?'Repetir':'Intentar de nuevo'}</button><button class="btn sec" data-x>Volver al camino</button></p></div></div>`;
+  render();animateAdv(advB,advA);
+  if(bonus)setTimeout(()=>addGold(bonus,document.querySelector('.res h2'),$('#rchest')),400);
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click',ev=>{
+  const t=ev.target.closest('button');if(!t)return;const d=t.dataset;
+  if(t.classList.contains('scr')){play(t);return}
+  if(d.v){view=d.v;render();scrollTo(0,0)}
+  else if(d.pl){S.cur=d.pl;save();view='camino';render();loadRank();if(!P().mode)modePick()}
+  else if(d.buy){buy(d.buy)}
+  else if(d.eq){equip(d.eq)}
+  else if(d.pw){usePw(d.pw)}
+  else if(d.mode){P().mode=d.mode;save();$('#ov').innerHTML='';render();scrollTo(0,0)}
+  else if(t.id==='md'){modePick()}
+  else if(t.id==='rec'){recover()}
+  else if(d.l){lesson(+d.l)}
+  else if(d.quiz){startQuiz(+d.quiz)}
+  else if(d.o!==undefined){answer(+d.o)}
+  else if('next' in d){if(Q.i<NQ-1){Q.i++;ask()}else result()}
+  else if('x' in d){$('#ov').innerHTML='';render()}
+  else if(t.id==='who'||t.id==='sw'){S.cur=null;save();render();scrollTo(0,0)}
+  else if(t.id==='rs'){if(d.sure){P().done={};save();render()}else{d.sure=1;t.textContent='¿Seguro? Toca otra vez'}}
+});
+const pv=()=>$('#pv');
+function showPv(f){const p=pv(),d=f.dataset;p.innerHTML=`<img src="${d.src}" alt=""><div class="n">${d.n}</div><div class="r ${d.r==='Conseguido'?'':'lk'}">${d.r==='Conseguido'?'✔ Conseguido':'🔒 '+d.r}</div>`;p.style.display='block';
+  const r=f.getBoundingClientRect(),w=p.offsetWidth,h=p.offsetHeight,vw=innerWidth,vh=innerHeight;
+  let x=r.left+r.width/2-w/2;x=Math.max(8,Math.min(vw-w-8,x));let y=r.top-h-10;if(y<8)y=Math.min(vh-h-8,r.bottom+10);p.style.left=x+'px';p.style.top=Math.max(8,y)+'px'}
+const hidePv=()=>{const p=pv();if(p)p.style.display='none'};
+document.addEventListener('mouseover',ev=>{const f=ev.target.closest('figure[data-src]');if(f)showPv(f)});
+document.addEventListener('mouseout',ev=>{const f=ev.target.closest('figure[data-src]');if(f&&!f.contains(ev.relatedTarget))hidePv()});
+document.addEventListener('focusin',ev=>{const f=ev.target.closest('figure[data-src]');if(f)showPv(f)});
+document.addEventListener('focusout',hidePv);
+addEventListener('scroll',hidePv,{passive:true});
+const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12}):null;
+function reveal(){document.querySelectorAll('.steps>div,.goals>div,.panel,.era-h').forEach(el=>{if(el.classList.contains('reveal'))return;if(!io){return}el.classList.add('reveal');io.observe(el)})}
+new MutationObserver(reveal).observe(document.getElementById('app'),{childList:true});
+document.addEventListener('click',ev=>{if(ev.target.closest('[data-cue]')){ev.preventDefault();ev.stopPropagation();const t=document.getElementById('start');if(t)t.scrollIntoView({behavior:'smooth'})}},true);
+document.addEventListener('change',ev=>{if(ev.target.name==='md'){document.querySelectorAll('label.mode').forEach(l=>l.classList.toggle('sel',l.contains(ev.target)));return}if(ev.target.id==='free'){P().free=ev.target.checked;save()}});
+document.addEventListener('submit',ev=>{ev.preventDefault();const n=$('#nm').value.trim();if(!n)return;const sel=(document.querySelector('input[name=md]:checked')||{}).value||'normal';if(!S.players[n])S.players[n]={done:{}};S.cur=n;P().mode=sel;save();view='camino';render();scrollTo(0,0)});
+if(S.cur&&!S.players[S.cur])S.cur=null;
+/* ---------- guardado en línea y ranking ---------- */
+const API='/api/guardianes';let ONLINE=null,RANK=null,MYPOS=0,RTOTAL=0,syncT=null;
+function estXp(p){const d=p.done||{};let t=0,b=0,pf=0;for(const k in d){t+=d[k];if(d[k]>=PASS)b++;if(d[k]>=NQ)pf++}return t*10+b*25+pf*50}
+function pid(p){if(!p.id){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';p.id=Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>A[b%32]).join('');store()}return p.id}
+const fmtCode=c=>c?c.slice(0,4)+'-'+c.slice(4):'';
+function queueSync(){if(ONLINE===false||!S.cur)return;clearTimeout(syncT);syncT=setTimeout(pushNow,1200)}
+async function pushNow(){if(!S.cur||!P())return;const p=W();pid(p);
+  try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({id:p.id,name:S.cur,xp:p.xp,books:count(),lv:level(),perf:perf(),mode:mode(),updated:p.updated||Date.now(),data:p})});
+    if(!r.ok)throw 0;const j=await r.json();ONLINE=true;MYPOS=j.pos;RTOTAL=j.total;loadRank()}catch(e){if(ONLINE===null)ONLINE=false}}
+async function loadRank(){const me=S.cur&&P()&&P().id||'';
+  try{const r=await fetch(API+'?me='+me,{cache:'no-store'});if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))throw 0;const j=await r.json();ONLINE=true;RANK=j.top;RTOTAL=j.total;MYPOS=j.pos}catch(e){ONLINE=false}
+  const el=document.getElementById('rank');if(el)el.innerHTML=rankPanel()}
+async function pullMe(){if(!S.cur||!P()||!P().id)return;
+  try{const r=await fetch(API+'?id='+P().id,{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+    if(j.data&&(j.updated||0)>(P().updated||0)){S.players[S.cur]=j.data;store();render()}}catch(e){}}
+async function recover(){const c=($('#rcode').value||'').toUpperCase().replace(/[^A-Z0-9]/g,''),m=$('#recmsg');
+  if(c.length!==8){m.textContent='El código tiene 8 letras o números, por ejemplo ABCD-2345.';return}
+  m.textContent='Buscando tu avance…';
+  try{const r=await fetch(API+'?id='+c,{cache:'no-store'});if(r.status===404){m.textContent='No encontramos ese código. Revísalo e inténtalo otra vez.';return}
+    if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))throw 0;const j=await r.json();
+    S.players[j.name]=Object.assign({},j.data,{id:j.id,updated:j.updated});S.cur=j.name;store();view='guardian';render();scrollTo(0,0);loadRank()}
+  catch(e){m.textContent='Para recuperar el avance, el juego debe estar publicado en Netlify con su servidor activo.'}}
+function rankList(){
+  if(ONLINE&&RANK)return RANK;
+  return Object.entries(S.players).map(([n,p])=>{const d=p.done||{};let b=0;for(const k in d)if(d[k]>=PASS)b++;return {n,xp:p.xp!=null?p.xp:estXp(p),b,lv:null,m:p.mode||'normal'}}).sort((a,c)=>c.xp-a.xp||c.b-a.b).slice(0,10)}
+function rankPanel(){
+  const L2=rankList(),me=S.cur,medal=['oro','plata','bronce'],podium=[1,0,2].filter(i=>L2[i]);
+  const pos=ONLINE?MYPOS:(L2.findIndex(x=>x.n===me)+1),total=ONLINE?RTOTAL:Object.keys(S.players).length;
+  const card=i=>{const x=L2[i];return `<div class="pod p${i+1} ${x.n===me?'me':''}"><div class="medal ${medal[i]}">${i+1}</div><b>${esc(x.n)}</b><small>${x.b} libros${x.m&&MODES[x.m]?' · '+MODES[x.m].n:''}</small><span>${x.xp} pts</span><i></i></div>`};
+  return `<div class="eyebrow">Ranking de guardianes</div><h3 style="font-size:24px;color:#f0e2c2">Los tres más fuertes</h3>
+  <p class="mut sm">${ONLINE?'Ranking de todos los guardianes que juegan en este sitio.':'Ranking de los guardianes de este dispositivo. Al publicar el juego en Netlify, el ranking será compartido entre todos.'} Los puntos se ganan con cada respuesta correcta, cada libro superado y cada desafío perfecto.</p>
+  ${L2.length?`<div class="podium">${podium.map(card).join('')}</div>`:'<p class="mut">Aún no hay guardianes en el ranking.</p>'}
+  ${L2.length>3?`<ol class="rlist" start="4">${L2.slice(3).map(x=>`<li class="${x.n===me?'me':''}"><b>${esc(x.n)}</b><span>${x.b} libros</span><em>${x.xp} pts</em></li>`).join('')}</ol>`:''}
+  ${pos?`<p class="mypos">Tu lugar: <b>#${pos}</b> de ${total} · ${W().xp} pts</p>`:''}
+  ${ONLINE&&P()&&P().id?`<p class="code">Tu código de guardián: <b>${fmtCode(P().id)}</b><br><span class="mut sm">Anótalo para seguir tu avance en otro dispositivo.</span></p>`:''}`}
+loadRank().then(()=>{if(ONLINE&&S.cur){pullMe().then(()=>{if(S.cur&&P()&&!P().id)pushNow()})}});
+render();
+</script>
+</body>
+</html>

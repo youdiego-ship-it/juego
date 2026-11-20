@@ -1,0 +1,8 @@
+{
+  "name": "guardianes-de-la-palabra",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "latest"
+  }
+}
